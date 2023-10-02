@@ -1,7 +1,7 @@
 import sys
 import re
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox , QStackedWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox , QStackedWidget, QVBoxLayout
 
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
@@ -22,7 +22,7 @@ class FlorkWindow(QWidget):
         self.page_intro = self.create_intro_page()
         self.stacked_widget.addWidget(self.page_intro)
 
-        # Página 2: Juego
+        # Página 2: Juego- situación inicial
         self.page_juego = self.create_description_game_page()
         self.stacked_widget.addWidget(self.page_juego)
 
@@ -62,11 +62,8 @@ class FlorkWindow(QWidget):
     def create_description_game_page(self):
         page = QWidget()
         
-        text_label = QLabel("FLORK LIFE DECISIONS", page)
-        text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        text_label.setFont(QFont("Gill Sans MT Condensed", 70))
-        text_label.setGeometry(0, 110, 900, 100)
-        text_label.setStyleSheet("color: black; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;")
+        
+        
 
         return page
 
