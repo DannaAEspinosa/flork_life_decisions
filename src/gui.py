@@ -1,6 +1,6 @@
 import sys
 import re
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox , QStackedWidget
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
@@ -25,6 +25,8 @@ class FlorkWindow(QWidget):
         text_label.setFont(QFont("Gill Sans MT Condensed", 70))
         text_label.setGeometry(0, 110, 900, 100)
         text_label.setStyleSheet("color: black; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;")
+
+        
 
         # Label "Ingresa tu nombre"
         label_nombre = QLabel("Ingresa tu nombre", self)
