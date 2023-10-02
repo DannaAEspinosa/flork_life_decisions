@@ -52,9 +52,9 @@ class Automata:
             State("q13"): f"{name} llama a su amigo, quien rápidamente acepta venir a pasar la noche \n Mientras espera a su amigo, {name} escucha ruidos extraños que parecen provenir del sótano \n ¿Qué debería hacer?",
             State("q14"): f"{name} se sienta en la sala de estar, nervioso y esperando a su amigo \n Los ruidos extraños continúan, y {name} se siente cada vez más inquieto \n Finalmente, su amigo llega y {name} le cuenta todo lo que ha estado experimentando \nSu amigo, incrédulo, sugiere que {name} debería irse de la casa por esa noche y regresar por la mañana con más personas para investigar \n",
             State("q15"): f"{name} baja las escaleras hacia el sótano, la linterna tiembla en su mano \n A medida que desciende más profundamente, el murmullo se vuelve más intenso \n Cuando llega al sótano, encuentra una puerta entreabierta que conduce a una habitación oscura \n {name} decide entrar en la habitación oscura \n En el rincón más alejado, ve una figura encapuchada que murmura palabras incomprensibles \n ¿Qué debería hacer?",
-            State("q16"): f"__ se acerca a la figura encapuchada en la habitación oscura \n La linterna tiembla en su mano mientras se acerca \n A medida que se aproxima,la figura encapuchada murmura palabras incomprensibles en un idioma desconocido \nLa figura de repente se detiene de murmurar y se da la vuelta lentamente para mirar a {name} directamente a los ojos \n Sus ojos son oscuros y sin vida, y su boca se curva en una sonrisa siniestra \n Entonces, comienza a pronunciar tu nombre y te llama con un tono escalofriante \n ¿Qué debería hacer ahora?",
+            State("q16"): f"{name}  se acerca a la figura encapuchada en la habitación oscura \n La linterna tiembla en su mano mientras se acerca \n A medida que se aproxima,la figura encapuchada murmura palabras incomprensibles en un idioma desconocido \nLa figura de repente se detiene de murmurar y se da la vuelta lentamente para mirar a {name} directamente a los ojos \n Sus ojos son oscuros y sin vida, y su boca se curva en una sonrisa siniestra \n Entonces, comienza a pronunciar tu nombre y te llama con un tono escalofriante \n ¿Qué debería hacer ahora?",
             State("q17"): f"Con cuidado, {name} retrocede lentamente, manteniendo la vista fija en la figura oscura al final del pasillo \n La linterna tiembla en su mano mientras da un paso tras otro hacaia atrás, alejándose de la figura \nFinalmente, llega a la parte superior de las escaleras y sale del sótano \n Cierra la puerta detrás de él y se apresura a alejarse de la casa \n La presencia inquietante de la figura oscura queda atrás mientras {name} corre hacia la seguridad del exterior \n¿Qué debería hacer ahora?",
-            State("q18"): f"Con valentía, {name} decide enfrentar la figura oscura que se encuentra al otro lado de la puerta cerrada con llave \n Con una mano temblorosa, gira lentamente la perilla de la puerta y abre la puerta \nLa figura oscura, con sus ojos oscuros y su sonrisa siniestra, está de pie justo afuera de la habitación \n Cuando {name} le pregunta quién es y qué quiere, la figura se inclina hacia adelante y susurra en su oído palabras incomprensibles y aterradoras \nDe repente, la figura se desvanece en la oscuridad y {name} queda solo en su habitación, asustado y confundido \n Los ruidos extraños cesan, pero la experiencia deja una profunda inquietud en {name} \nA partir de ese día, {name} vive con la constante sensación de que algo oscuro y sobrenatural lo acecha en las sombras \n La figura encapuchada sigue siendo un misterio sin resolver, y {name} nunca logra encontrar respuestas claras a las preguntas que le hizo esa noche \n",
+            State("q18"): f"Con valentía, {name}  decide enfrentar la figura oscura en el sótano oscuro. \nCon una mano temblorosa, se acerca más a la figura encapuchada y le pregunta quién es y qué quiere.\n Cuando {name}  le pregunta quién es y qué quiere, la figura se inclina hacia adelante y susurra en su oído palabras incomprensibles y aterradoras.\nDe repente, la figura se desvanece en la oscuridad, dejando solo un eco escalofriante en el sótano. {name}  queda solo en la penumbra, asustado y confundido. \nLos ruidos extraños cesan, pero la experiencia deja una profunda inquietud en {name} .\nA partir de ese día, {name}  vive con la constante sensación de que algo oscuro y sobrenatural lo acecha en las sombras.\nLa figura encapuchada sigue siendo un misterio sin resolver, y {name} nunca logra encontrar respuestas claras a las preguntas que le hizo esa noche.",
             State("q19"): f"La policía llega a su casa poco después de la llamada de {name} y realiza una búsqueda exhaustiva de la propiedad \n Aunque no encuentran ninguna evidencia física de la figura encapuchada, toman su reporte en serio \nEl oficial a cargo le asegura a {name} que patrullarán la zona con mayor frecuencia en las noches siguientes y sugiere que instale cámaras de seguridad en su hogar \n También le proporciona un número de contacto directo por si vuelve a enfrentarse a situaciones similares \nCon la presencia de la policía y el apoyo de las autoridades, {name} comienza a sentirse más seguro en su casa \n Aunque el misterio de la figura encapuchada nunca se resuelve por completo, {name} puede volver a su vida cotidiana con una sensación de protección adicional \n",
         }
 
@@ -100,3 +100,36 @@ class Automata:
         self.automaton = DeterministicFiniteAutomaton()
         for (estado_actual, simbolo), estado_destino in self.transiciones.items():
             self.automaton.add_transition(estado_actual, simbolo, estado_destino)
+
+def mostrar_opciones(estado_actual, automata):
+    opciones_disponibles = []
+    for transicion in automata.automaton.get_transitions_from_state(estado_actual):
+        opciones_disponibles.append(transicion[1])  # El símbolo de la transición
+    return opciones_disponibles
+
+# Función principal del juego
+def jugar_juego(automata):
+    estado_actual = automata.estado_inicial
+    print(automata.estado_texto[estado_actual])
+
+    while estado_actual not in automata.estado_aceptacion:
+        opciones = mostrar_opciones(estado_actual, automata)
+        print("\nOpciones disponibles:")
+        for i, opcion in enumerate(opciones):
+            print(f"{i + 1}. {automata.texto_transiciones[(estado_actual, opcion)]}")
+
+        # Solicita la elección del usuario
+        seleccion = int(input("Elige una opción (1-{0}): ".format(len(opciones))))
+        
+        if seleccion < 1 or seleccion > len(opciones):
+            print("Selección no válida. Introduce un número entre 1 y {0}.".format(len(opciones)))
+        else:
+            # Actualiza el estado actual
+            estado_actual = automata.automaton.get_transitions_from_state(estado_actual)[seleccion - 1][2]
+            print(automata.estado_texto[estado_actual])
+
+    print("¡Has llegado a un estado de aceptación del autómata!")
+
+if __name__ == "__main__":
+    automata = Automata()
+    jugar_juego(automata)
