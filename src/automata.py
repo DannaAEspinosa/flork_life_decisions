@@ -100,36 +100,3 @@ class Automata:
         self.automaton = DeterministicFiniteAutomaton()
         for (estado_actual, simbolo), estado_destino in self.transiciones.items():
             self.automaton.add_transition(estado_actual, simbolo, estado_destino)
-
-def mostrar_opciones(estado_actual, automata):
-    opciones_disponibles = []
-    for transicion in automata.automaton.get_transitions_from_state(estado_actual):
-        opciones_disponibles.append(transicion[1])  # El símbolo de la transición
-    return opciones_disponibles
-
-# Función principal del juego
-def jugar_juego(automata):
-    estado_actual = automata.estado_inicial
-    print(automata.estado_texto[estado_actual])
-
-    while estado_actual not in automata.estado_aceptacion:
-        opciones = mostrar_opciones(estado_actual, automata)
-        print("\nOpciones disponibles:")
-        for i, opcion in enumerate(opciones):
-            print(f"{i + 1}. {automata.texto_transiciones[(estado_actual, opcion)]}")
-
-        # Solicita la elección del usuario
-        seleccion = int(input("Elige una opción (1-{0}): ".format(len(opciones))))
-        
-        if seleccion < 1 or seleccion > len(opciones):
-            print("Selección no válida. Introduce un número entre 1 y {0}.".format(len(opciones)))
-        else:
-            # Actualiza el estado actual
-            estado_actual = automata.automaton.get_transitions_from_state(estado_actual)[seleccion - 1][2]
-            print(automata.estado_texto[estado_actual])
-
-    print("¡Has llegado a un estado de aceptación del autómata!")
-
-if __name__ == "__main__":
-    automata = Automata()
-    jugar_juego(automata)
