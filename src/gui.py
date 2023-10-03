@@ -1,8 +1,7 @@
 import sys
 import re
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy
-
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
@@ -25,8 +24,11 @@ class FlorkWindow(QWidget):
 
         # Página 2: Juego
         self.page_juego = self.create_description_game_page("")
-
         self.stacked_widget.addWidget(self.page_juego)
+
+        # Página 3: Después de hacer clic en "Estoy listo"
+        self.page_ready = self.create_ready_page("")
+        self.stacked_widget.addWidget(self.page_ready)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.stacked_widget)
@@ -86,7 +88,7 @@ class FlorkWindow(QWidget):
         iniciar_button = QPushButton("ESTOY LIST@", page)
         iniciar_button.setFont(QFont("Gill Sans MT Condensed", 20))
         iniciar_button.setStyleSheet("background-color: #FF3B41; color: white;")
-
+        iniciar_button.clicked.connect(self.startGame)
         # Texto dentro del recuadro
         texto = f"¡Hola {nombre}, te damos la bienvenida a FLORK DECISIONS LIFE! En este emocionante juego, te sumergirás en el fascinante mundo de Flork {nombre}, un personaje lleno de curiosidad y valentía que se enfrenta a una serie de desafíos y decisiones que afectarán su destino. \n\nTú eres el narrador de su historia y, en cada paso del camino, deberás tomar decisiones cruciales que influirán en el rumbo de sus aventuras. \n\nCONTROLES: \nPara poder tomar una decisión podrás teclear la letra correspondiente a cada opción (a, b o c) o simplemente darle click a la opción deseada. \n\nAhora sí ¿Estás listo para empezar?"
 
@@ -108,18 +110,118 @@ class FlorkWindow(QWidget):
 
         # Configurar el QVBoxLayout en la ventana
         page.setLayout(layout)
-
-
         return page
 
 
     def create_situation_inicial_game(self,nombre):
         page=QWidget()
-
-        
         return page
 
+    def create_ready_page(self,estadoActual):
+        page = QWidget()
+         # Crear un widget secundario para aplicar el efecto de desenfoque
+        blur_widget = QWidget(page)
+        blur_widget.setStyleSheet("background-color: rgba(255, 255, 255, 100);")  # Fondo semitransparente
+        blur_widget.setFixedSize(900, 700)  # Tamaño que cubre la página "listo"
 
+        # Aplicar un efecto de desenfoque al widget secundario
+        blur_effect = QGraphicsBlurEffect()
+        blur_effect.setBlurRadius(10)  # Ajusta el radio de desenfoque según lo desees
+        blur_widget.setGraphicsEffect(blur_effect)
+        layout = QVBoxLayout()
+         # Crear un widget secundario para aplicar el efecto de desenfoque
+        
+        top_layout=QHBoxLayout()
+        # Rectángulo de color en la parte superior
+        top_rect = QLabel()
+        top_rect.setFixedWidth(700)
+        top_rect.setFixedHeight(160)
+        top_rect.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_rect.setStyleSheet("background-color: #FF3B41")
+        top_layout.addWidget(top_rect)
+
+        center_layout=QHBoxLayout()
+        # Imagen en el centro
+        image_label = QLabel(page)
+        image_label.setFixedWidth(700)
+        image_label.setFixedHeight(300)
+        pixmap = QPixmap('assets/images/procesando.png')  # Reemplaza 'your_image.png' con la ruta de tu imagen
+        image_label.setPixmap(pixmap)
+
+        
+        center_layout.addWidget(image_label)
+
+        bottom_layout=QHBoxLayout()
+        # División en dos recuadros en la parte inferior
+        left_layout = QHBoxLayout()
+        center2_layout = QHBoxLayout()
+        right_layout = QHBoxLayout()
+
+        left_bottom_rect = QPushButton()
+        left_bottom_rect.setFixedWidth(270)
+        left_bottom_rect.setFixedHeight(90)
+        left_bottom_rect.setStyleSheet("background-color: #C93431")
+
+        center_bottom_rect = QPushButton()
+        center_bottom_rect.setFixedWidth(270)
+        center_bottom_rect.setFixedHeight(90)
+        center_bottom_rect.setStyleSheet("background-color: #C93431")
+
+        right_bottom_rect = QPushButton()
+        right_bottom_rect.setFixedWidth(270)
+        right_bottom_rect.setFixedHeight(90)
+        right_bottom_rect.setStyleSheet("background-color: #C93431")
+
+        # Agregar imagen a la izquierda de cada botón
+        left_image = QLabel()
+        left_image.setFixedWidth(65)
+        left_image.setFixedHeight(80)
+        left_image.setPixmap(QPixmap('assets/images/a.png'))  # Reemplaza 'left_image.png' con la ruta de tu imagen
+        left_lb = QLabel("")
+        left_layout.addWidget(left_image)
+        left_layout.addWidget(left_lb)
+        left_bottom_rect.setLayout(left_layout)
+
+        center_image = QLabel()
+        center_image.setFixedWidth(65)
+        center_image.setFixedHeight(80)
+        center_image.setPixmap(QPixmap('assets/images/b.png'))  # Reemplaza 'center_image.png' con la ruta de tu imagen
+        center_lb = QLabel("")
+        center2_layout.addWidget(center_image)
+        center2_layout.addWidget(center_lb)
+        center_bottom_rect.setLayout(center2_layout)
+
+        right_image = QLabel()
+        right_image.setFixedWidth(65)
+        right_image.setFixedHeight(80)
+        right_image.setPixmap(QPixmap('assets/images/c.png'))  # Reemplaza 'right_image.png' con la ruta de tu imagen
+        right_lb = QLabel("")
+        right_layout.addWidget(right_image)
+        right_layout.addWidget(right_lb)
+        right_bottom_rect.setLayout(right_layout)
+
+
+        # Agregar rectángulos al layout principal
+        bottom_layout.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+        bottom_layout.addWidget(center_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+        bottom_layout.addWidget(right_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        
+        # Agregar elementos al layout principal
+        layout.addLayout(top_layout)
+        layout.addLayout(center_layout)
+        layout.addLayout(bottom_layout)
+
+
+        # Configurar el QVBoxLayout en la ventana
+        page.setLayout(layout)
+
+        return page
+
+    def startGame(self,n):
+        self.page_ready = self.create_ready_page(n)
+        self.stacked_widget.addWidget(self.page_ready)
+        self.stacked_widget.setCurrentWidget(self.page_ready)
 
     def validar_nombre(self):
         nombre = self.input_nombre.text()
