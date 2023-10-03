@@ -14,7 +14,7 @@ class Automata:
         self.simbolos = list(self.lenguaje)
         self.estado_inicial = State("q0")
         self.estado_aceptacion = {
-            State("q3"), State("q6"), State("q8"), State("q9"),State("q11"),State("q12"),State("q14"), State("q18"),State("19")
+            State("q3"), State("q6"), State("q8"), State("q9"),State("q11"),State("q12"),State("q14"), State("q18"),State("q19")
         }
         
         self.transiciones = {

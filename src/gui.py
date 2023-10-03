@@ -117,6 +117,7 @@ class FlorkWindow(QWidget):
 
     def create_situation_inicial_game(self,nombre):
         page=QWidget()
+
         return page
 
     def create_ready_page(self,n,aut,estadoActual):
@@ -179,7 +180,7 @@ class FlorkWindow(QWidget):
                 right_bottom_rect.setFixedHeight(90)
                 right_bottom_rect.setStyleSheet("background-color: #C93431")
                 estado_actualC = self.elegirOpcion(aut,estadoActual,Symbol("c"))
-                right_bottom_rect.clicked.connect(lambda: self.change_page(aut,estado_actualC))
+                right_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualC))
 
             # Agregar imagen a la izquierda de cada botón
             
