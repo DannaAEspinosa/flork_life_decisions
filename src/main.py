@@ -1,13 +1,6 @@
-from .expresion import Expresion
+import gui 
+from automata import Automata
 
-expresion = Expresion()
-
-flag = False
-
-while flag==False:
-    name = input("Ingresa tu nombre: ")
-    flag = expresion.verificar(name)    
-
-
-
-
+if __name__ == '__main__':
+    gui.create_window()
+    
