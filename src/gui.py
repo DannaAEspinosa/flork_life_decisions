@@ -115,8 +115,9 @@ class FlorkWindow(QWidget):
 
     def create_situation_inicial_game(self,nombre):
         page=QWidget()
-
         
+
+
         return page
 
 
