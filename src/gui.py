@@ -1,6 +1,8 @@
 import sys
 import re
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy
+
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
@@ -20,8 +22,10 @@ class FlorkWindow(QWidget):
         self.page_intro = self.create_intro_page()
         self.stacked_widget.addWidget(self.page_intro)
 
+
         # Página 2: Juego
         self.page_juego = self.create_description_game_page("")
+
         self.stacked_widget.addWidget(self.page_juego)
 
         self.layout = QVBoxLayout()
@@ -37,7 +41,9 @@ class FlorkWindow(QWidget):
         text_label.setGeometry(0, 110, 900, 100)
         text_label.setStyleSheet("color: black;")
 
+
         label_nombre = QLabel("Ingresa tu nombre", page)
+
         label_nombre.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_nombre.setFont(QFont("Gill Sans MT Condensed", 30))
         label_nombre.setGeometry(0, 250, 900, 60)
@@ -57,6 +63,7 @@ class FlorkWindow(QWidget):
     
     def create_description_game_page(self, nombre):
         page = QWidget()
+
 
         layout = QVBoxLayout()
 
@@ -102,8 +109,15 @@ class FlorkWindow(QWidget):
         # Configurar el QVBoxLayout en la ventana
         page.setLayout(layout)
 
+
         return page
 
+
+    def create_situation_inicial_game(self,nombre):
+        page=QWidget()
+
+        
+        return page
 
 
 
