@@ -1,10 +1,11 @@
 import sys
 import re
-
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy
-
+import automata
+import main
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
+from pyformlang.finite_automaton import Symbol
 
 class FlorkWindow(QWidget):
     def __init__(self):
@@ -25,8 +26,11 @@ class FlorkWindow(QWidget):
 
         # Página 2: Juego
         self.page_juego = self.create_description_game_page("")
-
         self.stacked_widget.addWidget(self.page_juego)
+
+        # Página 3: Después de hacer clic en "Estoy listo"
+        self.page_ready = self.create_ready_page("",automata.Automata(""),automata.Automata("").estado_inicial)
+        self.stacked_widget.addWidget(self.page_ready)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.stacked_widget)
@@ -86,7 +90,7 @@ class FlorkWindow(QWidget):
         iniciar_button = QPushButton("ESTOY LIST@", page)
         iniciar_button.setFont(QFont("Gill Sans MT Condensed", 20))
         iniciar_button.setStyleSheet("background-color: #FF3B41; color: white;")
-
+        iniciar_button.clicked.connect(lambda: self.startGame(nombre))
         # Texto dentro del recuadro
         texto = f"¡Hola {nombre}, te damos la bienvenida a FLORK DECISIONS LIFE! En este emocionante juego, te sumergirás en el fascinante mundo de Flork {nombre}, un personaje lleno de curiosidad y valentía que se enfrenta a una serie de desafíos y decisiones que afectarán su destino. \n\nTú eres el narrador de su historia y, en cada paso del camino, deberás tomar decisiones cruciales que influirán en el rumbo de sus aventuras. \n\nCONTROLES: \nPara poder tomar una decisión podrás teclear la letra correspondiente a cada opción (a, b o c) o simplemente darle click a la opción deseada. \n\nAhora sí ¿Estás listo para empezar?"
 
@@ -108,18 +112,162 @@ class FlorkWindow(QWidget):
 
         # Configurar el QVBoxLayout en la ventana
         page.setLayout(layout)
-
-
         return page
 
 
     def create_situation_inicial_game(self,nombre):
         page=QWidget()
-
-        
         return page
 
+    def create_ready_page(self,n,aut,estadoActual):
+        page = QWidget()
+        # Crear un widget secundario para aplicar el efecto de desenfoque
+        blur_widget = QWidget(page)
+        blur_widget.setStyleSheet("background-color: rgba(255, 255, 255, 100);")  # Fondo semitransparente
+        blur_widget.setFixedSize(900, 700)  # Tamaño que cubre la página "listo"
 
+        # Aplicar un efecto de desenfoque al widget secundario
+        blur_effect = QGraphicsBlurEffect()
+        blur_effect.setBlurRadius(10)  # Ajusta el radio de desenfoque según lo desees
+        blur_widget.setGraphicsEffect(blur_effect)
+        layout = QVBoxLayout()
+         # Crear un widget secundario para aplicar el efecto de desenfoque
+        top_layout=QHBoxLayout()
+        # Rectángulo de color en la parte superior
+        top_rect = QLabel(aut.estado_texto[estadoActual])
+        top_rect.setFixedWidth(700)
+        top_rect.setFixedHeight(160)
+        top_rect.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_rect.setStyleSheet("background-color: #FF3B41")
+        top_layout.addWidget(top_rect)
+
+        center_layout=QHBoxLayout()
+        # Imagen en el centro
+        image_label = QLabel(page)
+        image_label.setFixedWidth(700)
+        image_label.setFixedHeight(300)
+        pixmap = QPixmap(aut.estado_image[estadoActual])  # Reemplaza 'your_image.png' con la ruta de tu imagen
+        image_label.setPixmap(pixmap)
+
+        
+        center_layout.addWidget(image_label)
+
+        # División en dos recuadros en la parte inferior
+        if estadoActual not in aut.estado_aceptacion:
+            bottom_layout=QHBoxLayout()
+            left_layout = QHBoxLayout()
+            center2_layout = QHBoxLayout()
+            right_layout = QHBoxLayout()
+
+            left_bottom_rect = QPushButton()
+            left_bottom_rect.setFixedWidth(270)
+            left_bottom_rect.setFixedHeight(90)
+            left_bottom_rect.setStyleSheet("background-color: #C93431")
+            estado_actualA = self.elegirOpcion(aut,estadoActual,Symbol("a"))
+            left_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualA))
+
+            center_bottom_rect = QPushButton()
+            center_bottom_rect.setFixedWidth(270)
+            center_bottom_rect.setFixedHeight(90)
+            center_bottom_rect.setStyleSheet("background-color: #C93431")
+            estado_actualB = self.elegirOpcion(aut,estadoActual,Symbol("b"))
+            center_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualB))
+
+            if estadoActual == aut.estado_inicial: 
+                right_bottom_rect = QPushButton()
+                right_bottom_rect.setFixedWidth(270)
+                right_bottom_rect.setFixedHeight(90)
+                right_bottom_rect.setStyleSheet("background-color: #C93431")
+                estado_actualC = self.elegirOpcion(aut,estadoActual,Symbol("c"))
+                right_bottom_rect.clicked.connect(lambda: self.change_page(aut,estado_actualC))
+
+            # Agregar imagen a la izquierda de cada botón
+            
+            simboloA=Symbol("a")
+            transicionA=(estadoActual,simboloA)
+            left_image = QLabel()
+            left_image.setFixedWidth(65)
+            left_image.setFixedHeight(80)
+            left_image.setPixmap(QPixmap('assets/images/a.png'))  # Reemplaza 'left_image.png' con la ruta de tu imagen
+            left_lb = QLabel(aut.texto_transiciones[transicionA])
+            """font = left_lb.font()
+            font.setPointSize(12)  # Cambia el tamaño de la fuente según tus preferencias
+            left_lb.setFont(font)"""
+            left_lb.setWordWrap(True)
+            left_layout.addWidget(left_image)
+            left_layout.addWidget(left_lb)
+            left_bottom_rect.setLayout(left_layout)
+            
+            simboloB=Symbol("b")
+            transicionB=(estadoActual,simboloB)
+            center_image = QLabel()
+            center_image.setFixedWidth(65)
+            center_image.setFixedHeight(80)
+            center_image.setPixmap(QPixmap('assets/images/b.png'))  # Reemplaza 'center_image.png' con la ruta de tu imagen
+            center_lb = QLabel(aut.texto_transiciones[transicionB])
+            center_lb.setWordWrap(True)
+            center2_layout.addWidget(center_image)
+            center2_layout.addWidget(center_lb)
+            center_bottom_rect.setLayout(center2_layout)
+            
+            if estadoActual == aut.estado_inicial: 
+                simboloC=Symbol("c")
+                transicionC=(estadoActual,simboloC)
+                right_image = QLabel()
+                right_image.setFixedWidth(65)
+                right_image.setFixedHeight(80)
+                right_image.setPixmap(QPixmap('assets/images/c.png'))  # Reemplaza 'right_image.png' con la ruta de tu imagen
+                right_lb = QLabel(aut.texto_transiciones[transicionC])
+                right_lb.setWordWrap(True)
+                right_layout.addWidget(right_image)
+                right_layout.addWidget(right_lb)
+                right_bottom_rect.setLayout(right_layout)
+
+
+            # Agregar rectángulos al layout principal
+            bottom_layout.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            bottom_layout.addWidget(center_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            if estadoActual == aut.estado_inicial: 
+                bottom_layout.addWidget(right_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+        else:
+            bottom_layout=QHBoxLayout()
+            left_bottom_rect = QLabel("Haz llegado al final de la historia")
+            left_bottom_rect.setFixedWidth(270)
+            left_bottom_rect.setFixedHeight(90)
+            left_bottom_rect.setStyleSheet("background-color: #C93431")
+
+            left_button_rect = QPushButton("Volver a jugar")
+            left_button_rect.setFixedWidth(270)
+            left_button_rect.setFixedHeight(90)
+            left_button_rect.setStyleSheet("background-color: #C93431")
+            left_button_rect.clicked.connect(lambda: self.startGame(n))
+
+            bottom_layout.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            bottom_layout.addWidget(left_button_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        
+        # Agregar elementos al layout principal
+        layout.addLayout(top_layout)
+        layout.addLayout(center_layout)
+        layout.addLayout(bottom_layout)
+
+
+        # Configurar el QVBoxLayout en la ventana
+        page.setLayout(layout)
+
+        return page
+    
+    def change_page(self, n,aut, estadoActual):
+        self.page_ready = self.create_ready_page(n,aut, estadoActual)
+        self.stacked_widget.addWidget(self.page_ready)
+        self.stacked_widget.setCurrentWidget(self.page_ready)
+
+    def startGame(self,nombre):
+        aut = automata.Automata(nombre)
+        estado_actual = aut.estado_inicial
+        self.page_ready = self.create_ready_page(nombre,aut,estado_actual)
+        self.stacked_widget.addWidget(self.page_ready)
+        self.stacked_widget.setCurrentWidget(self.page_ready)
 
     def validar_nombre(self):
         nombre = self.input_nombre.text()
@@ -127,12 +275,18 @@ class FlorkWindow(QWidget):
         patron = r'^[a-zA-Z]+$'
         if re.match(patron, nombre):
             # Cambiar a la página del juego
-            self.page_juego = self.create_description_game_page(nombre)
+            self.page_juego = self.create_description_game_page("Flork "+nombre)
             self.stacked_widget.addWidget(self.page_juego)
             self.stacked_widget.setCurrentWidget(self.page_juego)
         else:
             # Mostrar mensaje de error si el nombre no cumple con el patrón
             QMessageBox.critical(self, "Error", "El nombre solo debe contener letras (a-z o A-Z).")
+    
+    def elegirOpcion(self,aut,estadoAct, simboloElegido):
+        transicionElegida = (estadoAct, simboloElegido)
+        if transicionElegida in aut.transiciones:
+            estadoAct = aut.transiciones[transicionElegida]
+        return estadoAct
 
 def create_window():
     app = QApplication(sys.argv)

@@ -1,7 +1,7 @@
 from pyformlang.finite_automaton import Symbol, State, DeterministicFiniteAutomaton
 
 class Automata:
-    def __init__(self):
+    def __init__(self, name):
         self.estados = {
             State("q0"), State("q1"), State("q2"), State("q3"), State("q4"),
             State("q5"), State("q6"), State("q7"), State("q8"), State("q9"),
@@ -11,6 +11,7 @@ class Automata:
         self.lenguaje = {
             Symbol("a"), Symbol("b"), Symbol("c")
         }
+        self.simbolos = list(self.lenguaje)
         self.estado_inicial = State("q0")
         self.estado_aceptacion = {
             State("q3"), State("q6"), State("q8"), State("q9"),State("q11"),State("q12"),State("q14"), State("q18"),State("19")
@@ -34,7 +35,6 @@ class Automata:
             (State("q17"), Symbol("a")): State("q3"), (State("q17"), Symbol("b")): State("q19")
         }
 
-        name="Flork Diana "
         self.estado_texto = {
             State("q0"): f"{name} se despierta en su cómoda cama, el reloj marca las 3:00 a.m., y todo está en silencio \nSiente que algo extraño está ocurriendo en su casa \n ¿Qué debería hacer?",
             State("q1"): f"Con valentía, {name} se levanta de la cama y enciende una linterna \n Los pasos resonan en la oscuridad mientras se aventura por la casa \n Llega a la sala de estar y escucha un murmullo proveniente de la cocina \n¿Qué debería hacer?",
@@ -95,7 +95,29 @@ class Automata:
             (State("q17"), Symbol("b")): f"{name} decide llamar a la policía desde su teléfono móvil y reportar lo que ha visto en el sótano.",
         }
         
-        
+        self.estado_image = {
+            State("q0"): "assets/images/states/0.png",
+            State("q1"): "assets/images/states/1.png",
+            State("q2"): "assets/images/states/2.png",
+            State("q3"): "assets/images/states/3.png",
+            State("q4"): "assets/images/states/4.png",
+            State("q5"):"assets/images/states/5.png",
+            State("q6"): "assets/images/states/6.png",
+            State("q7"):"assets/images/states/7.png",
+            State("q8"):"assets/images/states/8.png",
+            State("q9"): "assets/images/states/9.png",
+            State("q10"): "assets/images/states/10.png",
+            State("q11"): "assets/images/states/11.png",
+            State("q12"): "assets/images/states/12.png",
+            State("q13"): "assets/images/states/13.png",
+            State("q14"):"assets/images/states/14.png",
+            State("q15"):"assets/images/states/15.png",
+            State("q16"): "assets/images/states/16.png",
+            State("q17"): "assets/images/states/17.png",
+            State("q18"):"assets/images/states/18.png",
+            State("q19"): "assets/images/states/19.png"
+        }
+
         # Crea el autómata y agrega las transiciones
         self.automaton = DeterministicFiniteAutomaton()
         for (estado_actual, simbolo), estado_destino in self.transiciones.items():
