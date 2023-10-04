@@ -46,7 +46,7 @@ class FlorkWindow(QWidget):
         text_label.setStyleSheet("color: black;")
 
 
-        label_nombre = QLabel("Ingresa tu nombre", page)
+        label_nombre = QLabel("Ingresa  nombre", page)
 
         label_nombre.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_nombre.setFont(QFont("Gill Sans MT Condensed", 30))
@@ -67,8 +67,7 @@ class FlorkWindow(QWidget):
     
     def create_description_game_page(self, nombre):
         page = QWidget()
-
-
+        
         layout = QVBoxLayout()
 
         text_label = QLabel("Descripción del juego", page)
@@ -152,6 +151,8 @@ class FlorkWindow(QWidget):
         
         center_layout.addWidget(image_label)
 
+        print(estadoActual)
+
         # División en dos recuadros en la parte inferior
         if estadoActual not in aut.estado_aceptacion:
             bottom_layout=QHBoxLayout()
@@ -171,6 +172,8 @@ class FlorkWindow(QWidget):
             center_bottom_rect.setFixedHeight(90)
             center_bottom_rect.setStyleSheet("background-color: #C93431")
             estado_actualB = self.elegirOpcion(aut,estadoActual,Symbol("b"))
+            print(".")
+            print(estado_actualB)
             center_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualB))
 
             if estadoActual == aut.estado_inicial: 
@@ -179,7 +182,7 @@ class FlorkWindow(QWidget):
                 right_bottom_rect.setFixedHeight(90)
                 right_bottom_rect.setStyleSheet("background-color: #C93431")
                 estado_actualC = self.elegirOpcion(aut,estadoActual,Symbol("c"))
-                right_bottom_rect.clicked.connect(lambda: self.change_page(aut,estado_actualC))
+                right_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualC))
 
             # Agregar imagen a la izquierda de cada botón
             
