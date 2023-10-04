@@ -48,15 +48,14 @@ class Gramatica:
         )
 
 
-    def verificar_cadena(self):
-        input_string = "Yo creo que el final se puede mejorar con perros y gatos"
-        gram = input_string[0:39]
-        
-        
-        try:
-          parse_tree = parse.parse(gram.split())
-          print(f'La cadena "{input_string}" es válida según la gramática.')
-        except ValueError:
-          print(f'La cadena "{input_string}" no es válida según la gramática.')
+    def validar_cadena(self, cadena):
+       cadena_lista = cadena.split(" ")
+       conjunto_terminales = self.glc.terminals
+       lista_verificar = []
+       for i in cadena_lista:
+          if i=="Yo" or i=="creo" or i=="que" or i=="el" or i=="final" or i=="puede" or i=="mejorar" or i=="con":
+            tmp = Terminal(i)
+            lista_verificar.append(tmp)
+       return self.glc.contains(lista_verificar)
 
 
