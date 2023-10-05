@@ -46,7 +46,7 @@ class Gramatica:
             start_symbol=self.oracion,
             productions=productions
         )
-
+    
 
     def validar_cadena(self, cadena):
        cadena_lista = cadena.split(" ")
