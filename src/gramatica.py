@@ -47,7 +47,6 @@ class Gramatica:
             productions=productions
         )
 
-
     def validar_cadena(self, cadena):
        cadena_lista = cadena.split(" ")
        conjunto_terminales = self.glc.terminals

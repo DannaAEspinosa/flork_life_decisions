@@ -47,7 +47,7 @@ class FlorkWindow(QWidget):
 
 
         label_nombre = QLabel("Ingresa tu nombre", page)
-
+        
         label_nombre.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_nombre.setFont(QFont("Gill Sans MT Condensed", 30))
         label_nombre.setGeometry(0, 250, 900, 60)

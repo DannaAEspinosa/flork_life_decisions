@@ -4,6 +4,7 @@ class Expresion:
 
     def __init__(self):
        self.patron = r'^[A-Z][a-zA-Z]{2,}$'
+       
     
     def verificar(self, name):
 
