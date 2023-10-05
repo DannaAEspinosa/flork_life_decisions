@@ -1,8 +1,6 @@
 import sys
-import re
-import automata
-import expresion
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect, QInputDialog
+import automata, expresion, gramatica
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect, QInputDialog, QDialog, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 from pyformlang.finite_automaton import Symbol
@@ -258,6 +256,7 @@ class FlorkWindow(QWidget):
             left_bottom_rect.setStyleSheet("background-color: white")
             left_bottom_rect.setFont(QFont("Gill Sans MT Condensed", 15))
             left_bottom_rect.setWordWrap(True)
+
             x.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             
             bottom_layout=QHBoxLayout()
@@ -267,6 +266,8 @@ class FlorkWindow(QWidget):
             r_button_rect.setFixedHeight(90)
             r_button_rect.setStyleSheet("background-color: #C93431")
             r_button_rect.setFont(QFont("Gill Sans MT Condensed", 15))
+
+            r_button_rect.clicked.connect(self.nuevoFinal)
 
             left_button_rect = QPushButton("Volver a jugar")
             left_button_rect.setFixedWidth(270)
@@ -297,7 +298,9 @@ class FlorkWindow(QWidget):
 
     def restartName(self, n):
         while True:
-            reply = QMessageBox.question(self, 'Cambiar Nombre', '¿Desea cambiar su nombre?', QMessageBox.Yes | QMessageBox.No)
+
+            reply = QMessageBox.question(self, 'Reiniciar juego', '¿Desea cambiar el nombre de Flork?', QMessageBox.Yes | QMessageBox.No)
+        
 
             if reply == QMessageBox.Yes:
                 new_name, ok = QInputDialog.getText(self, 'Cambiar Nombre', 'Ingrese un nuevo nombre:')
@@ -311,8 +314,11 @@ class FlorkWindow(QWidget):
                 else:
                     break  # Si el usuario cancela
             else:
+                
                 break  # Si el usuario no quiere cambiar el nombre
         return n
+
+        
 
     def startGame(self,nombre):
         aut = automata.Automata("Flork "+nombre)
@@ -340,6 +346,41 @@ class FlorkWindow(QWidget):
         if transicionElegida in aut.transiciones:
             estadoAct = aut.transiciones[transicionElegida]
         return estadoAct
+    
+
+    def nuevoFinal(self):
+        dialog = NuevoFinalDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            nuevo_final = dialog.text_edit.toPlainText()
+
+class NuevoFinalDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Sugerir otro final")
+        self.setLayout(QVBoxLayout())
+
+        self.label = QLabel("Ingrese un nuevo final:", self)
+        self.text_edit = QTextEdit(self)
+        self.text_edit.setPlaceholderText("Yo creo que el final puede mejorar con...")
+        self.accept_button = QPushButton("Enviar", self)
+        self.accept_button.clicked.connect(self.validar_final)
+
+        self.layout().addWidget(self.label)
+        self.layout().addWidget(self.text_edit)
+        self.layout().addWidget(self.accept_button)
+
+
+    def validar_final(self):
+            new_final = self.text_edit.toPlainText()
+            gr = gramatica.Gramatica()
+            if gr.validar_cadena(new_final):
+                QMessageBox.accept(self, "Final aceptado exitosamente", "¡Gracias por tu sugerencia, Esto nos ayudará a crear historias  más geniales!")
+                self.accept()  # Cerrar el cuadro de diálogo si el final es válido
+            else:
+                reply = QMessageBox.critical(self, "Error", "El final sugerido no cumple con la gramática establecida ya que debe empezar con la cadena 'Yo creo que el final puede mejorar con '. ¿Desea seguir editando?",
+                                            QMessageBox.Yes | QMessageBox.No)
+                if reply == QMessageBox.No:
+                    self.reject()  # Cerrar el cuadro de diálogo si el usuario elige no seguir editando
 
 def create_window():
     app = QApplication(sys.argv)
