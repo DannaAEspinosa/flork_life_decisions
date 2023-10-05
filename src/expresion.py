@@ -3,15 +3,17 @@ import re
 class Expresion:
 
     def __init__(self):
-       self.patron = r'^[A-Z][a-zA-Z]{2,}$'
-    
-    def verificar(self, name):
+       self.expName = r'^[A-Z][a-zA-Z]{2,}$'
+       self.expNewFinal =r'\b(Yo|creo|que|el|final|puede|mejorar|con)\b'
+       
+    def get_expName(self):
+        return self.expName
 
-        if re.match(self.patron,name):
-            return True
-        else: 
-            return False
-        
+    def get_expNewFinal(self):
+        return self.expNewFinal
+    
+    def validateName(self, name):
+        return re.match(self.expName,name)        
 
     
 
