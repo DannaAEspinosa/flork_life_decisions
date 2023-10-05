@@ -1,8 +1,6 @@
 import sys
-import re
-import automata
-import main
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect
+import automata, expresion, gramatica
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect, QInputDialog, QDialog, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 from pyformlang.finite_automaton import Symbol
@@ -46,8 +44,8 @@ class FlorkWindow(QWidget):
         text_label.setStyleSheet("color: black;")
 
 
-        label_nombre = QLabel("Ingresa tu nombre", page)
-        
+        label_nombre = QLabel("Ingresa  nombre", page)
+
         label_nombre.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_nombre.setFont(QFont("Gill Sans MT Condensed", 30))
         label_nombre.setGeometry(0, 250, 900, 60)
@@ -67,8 +65,7 @@ class FlorkWindow(QWidget):
     
     def create_description_game_page(self, nombre):
         page = QWidget()
-
-
+        
         layout = QVBoxLayout()
 
         text_label = QLabel("Descripción del juego", page)
@@ -137,9 +134,12 @@ class FlorkWindow(QWidget):
         # Rectángulo de color en la parte superior
         top_rect = QLabel(aut.estado_texto[estadoActual])
         top_rect.setFixedWidth(700)
-        top_rect.setFixedHeight(160)
-        top_rect.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_rect.setFixedHeight(200)
+        top_rect.setAlignment(Qt.AlignmentFlag.AlignCenter )
         top_rect.setStyleSheet("background-color: #FF3B41")
+        top_rect.setFont(QFont("Gill Sans MT Condensed", 12))
+        top_rect.setWordWrap(True)
+        top_rect.setMargin(10)
         top_layout.addWidget(top_rect)
 
         center_layout=QHBoxLayout()
@@ -153,6 +153,7 @@ class FlorkWindow(QWidget):
         
         center_layout.addWidget(image_label)
 
+
         # División en dos recuadros en la parte inferior
         if estadoActual not in aut.estado_aceptacion:
             bottom_layout=QHBoxLayout()
@@ -161,23 +162,33 @@ class FlorkWindow(QWidget):
             right_layout = QHBoxLayout()
 
             left_bottom_rect = QPushButton()
-            left_bottom_rect.setFixedWidth(270)
-            left_bottom_rect.setFixedHeight(90)
+            if estadoActual == aut.estado_inicial: 
+                left_bottom_rect.setFixedWidth(270)
+                left_bottom_rect.setFixedHeight(100)
+            else:
+                left_bottom_rect.setFixedWidth(350)
+                left_bottom_rect.setFixedHeight(100)
             left_bottom_rect.setStyleSheet("background-color: #C93431")
             estado_actualA = self.elegirOpcion(aut,estadoActual,Symbol("a"))
             left_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualA))
 
             center_bottom_rect = QPushButton()
-            center_bottom_rect.setFixedWidth(270)
-            center_bottom_rect.setFixedHeight(90)
+            if estadoActual == aut.estado_inicial: 
+                center_bottom_rect.setFixedWidth(270)
+                center_bottom_rect.setFixedHeight(100)
+            else:
+                center_bottom_rect.setFixedWidth(350)
+                center_bottom_rect.setFixedHeight(100)
+            
             center_bottom_rect.setStyleSheet("background-color: #C93431")
             estado_actualB = self.elegirOpcion(aut,estadoActual,Symbol("b"))
+
             center_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualB))
 
             if estadoActual == aut.estado_inicial: 
                 right_bottom_rect = QPushButton()
                 right_bottom_rect.setFixedWidth(270)
-                right_bottom_rect.setFixedHeight(90)
+                right_bottom_rect.setFixedHeight(100)
                 right_bottom_rect.setStyleSheet("background-color: #C93431")
                 estado_actualC = self.elegirOpcion(aut,estadoActual,Symbol("c"))
                 right_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualC))
@@ -188,12 +199,10 @@ class FlorkWindow(QWidget):
             transicionA=(estadoActual,simboloA)
             left_image = QLabel()
             left_image.setFixedWidth(65)
-            left_image.setFixedHeight(80)
+            left_image.setFixedHeight(90)
             left_image.setPixmap(QPixmap('assets/images/a.png'))  # Reemplaza 'left_image.png' con la ruta de tu imagen
             left_lb = QLabel(aut.texto_transiciones[transicionA])
-            """font = left_lb.font()
-            font.setPointSize(12)  # Cambia el tamaño de la fuente según tus preferencias
-            left_lb.setFont(font)"""
+            left_lb.setFont(QFont("Gill Sans MT Condensed", 10))
             left_lb.setWordWrap(True)
             left_layout.addWidget(left_image)
             left_layout.addWidget(left_lb)
@@ -206,6 +215,7 @@ class FlorkWindow(QWidget):
             center_image.setFixedHeight(80)
             center_image.setPixmap(QPixmap('assets/images/b.png'))  # Reemplaza 'center_image.png' con la ruta de tu imagen
             center_lb = QLabel(aut.texto_transiciones[transicionB])
+            center_lb.setFont(QFont("Gill Sans MT Condensed", 10))
             center_lb.setWordWrap(True)
             center2_layout.addWidget(center_image)
             center2_layout.addWidget(center_lb)
@@ -219,6 +229,7 @@ class FlorkWindow(QWidget):
                 right_image.setFixedHeight(80)
                 right_image.setPixmap(QPixmap('assets/images/c.png'))  # Reemplaza 'right_image.png' con la ruta de tu imagen
                 right_lb = QLabel(aut.texto_transiciones[transicionC])
+                right_lb.setFont(QFont("Gill Sans MT Condensed", 10))
                 right_lb.setWordWrap(True)
                 right_layout.addWidget(right_image)
                 right_layout.addWidget(right_lb)
@@ -230,27 +241,49 @@ class FlorkWindow(QWidget):
             bottom_layout.addWidget(center_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             if estadoActual == aut.estado_inicial: 
                 bottom_layout.addWidget(right_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            
+                    
+            # Agregar elementos al layout principal
+            layout.addLayout(top_layout)
+            layout.addLayout(center_layout)
+            layout.addLayout(bottom_layout)
         else:
-            bottom_layout=QHBoxLayout()
+            x=QHBoxLayout()
+
             left_bottom_rect = QLabel("Haz llegado al final de la historia")
             left_bottom_rect.setFixedWidth(270)
-            left_bottom_rect.setFixedHeight(90)
-            left_bottom_rect.setStyleSheet("background-color: #C93431")
+            left_bottom_rect.setFixedHeight(30)
+            left_bottom_rect.setStyleSheet("background-color: white")
+            left_bottom_rect.setFont(QFont("Gill Sans MT Condensed", 15))
+            left_bottom_rect.setWordWrap(True)
+
+            x.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            
+            bottom_layout=QHBoxLayout()
+            
+            r_button_rect = QPushButton("Sugerir otro final")
+            r_button_rect.setFixedWidth(270)
+            r_button_rect.setFixedHeight(90)
+            r_button_rect.setStyleSheet("background-color: #C93431")
+            r_button_rect.setFont(QFont("Gill Sans MT Condensed", 15))
+
+            r_button_rect.clicked.connect(self.nuevoFinal)
 
             left_button_rect = QPushButton("Volver a jugar")
             left_button_rect.setFixedWidth(270)
             left_button_rect.setFixedHeight(90)
             left_button_rect.setStyleSheet("background-color: #C93431")
-            left_button_rect.clicked.connect(lambda: self.startGame(n))
+            left_button_rect.setFont(QFont("Gill Sans MT Condensed", 15))
 
-            bottom_layout.addWidget(left_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
+            left_button_rect.clicked.connect(lambda: self.startGame(self.restartName(n)))
+
+            bottom_layout.addWidget(r_button_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             bottom_layout.addWidget(left_button_rect, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        
-        # Agregar elementos al layout principal
-        layout.addLayout(top_layout)
-        layout.addLayout(center_layout)
-        layout.addLayout(bottom_layout)
+            layout.addLayout(top_layout)
+            layout.addLayout(center_layout)
+            layout.addLayout(x)
+            layout.addLayout(bottom_layout)
 
 
         # Configurar el QVBoxLayout en la ventana
@@ -263,37 +296,100 @@ class FlorkWindow(QWidget):
         self.stacked_widget.addWidget(self.page_ready)
         self.stacked_widget.setCurrentWidget(self.page_ready)
 
+    def restartName(self, n):
+        while True:
+
+            reply = QMessageBox.question(self, 'Reiniciar juego', '¿Desea cambiar el nombre de Flork?', QMessageBox.Yes | QMessageBox.No)
+        
+
+            if reply == QMessageBox.Yes:
+                new_name, ok = QInputDialog.getText(self, 'Cambiar Nombre', 'Ingrese un nuevo nombre:')
+                if ok:
+                    exp = expresion.Expresion()
+                    if exp.validateName(new_name):
+                        n = new_name
+                        break 
+                    else:
+                        QMessageBox.critical(self, "Error", "La cadena debe cumplir con las siguientes condiciones: \n\n*Solo se aceptan letras (a-z o A-Z). \n*La primer letra debe ser mayúscula (A-Z). \n*La longitud de la cadena debe ser mayor a 2 caracteres. \n\nEjemplo: (Diana, Carlos, Danna)")
+                else:
+                    break  # Si el usuario cancela
+            else:
+                
+                break  # Si el usuario no quiere cambiar el nombre
+        return n
+
+        
+
     def startGame(self,nombre):
-        aut = automata.Automata(nombre)
+        aut = automata.Automata("Flork "+nombre)
         estado_actual = aut.estado_inicial
         self.page_ready = self.create_ready_page(nombre,aut,estado_actual)
         self.stacked_widget.addWidget(self.page_ready)
         self.stacked_widget.setCurrentWidget(self.page_ready)
 
+
     def validar_nombre(self):
         nombre = self.input_nombre.text()
         # Expresión regular para validar que el nombre solo contenga letras
-        patron = r'^[a-zA-Z]+$'
-        if re.match(patron, nombre):
+        exp=expresion.Expresion()
+        if exp.validateName(nombre):
             # Cambiar a la página del juego
-            self.page_juego = self.create_description_game_page("Flork "+nombre)
+            self.page_juego = self.create_description_game_page(nombre)
             self.stacked_widget.addWidget(self.page_juego)
             self.stacked_widget.setCurrentWidget(self.page_juego)
         else:
             # Mostrar mensaje de error si el nombre no cumple con el patrón
-            QMessageBox.critical(self, "Error", "El nombre solo debe contener letras (a-z o A-Z).")
+            QMessageBox.critical(self, "Error", "La cadena debe cumplir con las siguientes condiciones: \n\n*Solo se aceptan letras  (a-z o A-Z). \n*La primer letra debe ser mayúscula (A-Z). \n*La longitud de la cadena debe ser mayor a 2 caracteres. \n\nEjemplo: (Diana, Carlos, Danna)")
     
     def elegirOpcion(self,aut,estadoAct, simboloElegido):
         transicionElegida = (estadoAct, simboloElegido)
         if transicionElegida in aut.transiciones:
             estadoAct = aut.transiciones[transicionElegida]
         return estadoAct
+    
+
+    def nuevoFinal(self):
+        dialog = NuevoFinalDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            nuevo_final = dialog.text_edit.toPlainText()
+
+class NuevoFinalDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Sugerir otro final")
+        self.setLayout(QVBoxLayout())
+
+        self.label = QLabel("Ingrese un nuevo final:", self)
+        self.text_edit = QTextEdit(self)
+        self.text_edit.setPlaceholderText("Yo creo que el final puede mejorar con...")
+        self.accept_button = QPushButton("Enviar", self)
+        self.accept_button.clicked.connect(self.validar_final)
+
+        self.layout().addWidget(self.label)
+        self.layout().addWidget(self.text_edit)
+        self.layout().addWidget(self.accept_button)
+
+
+    def validar_final(self):
+            new_final = self.text_edit.toPlainText()
+            gr = gramatica.Gramatica()
+            if gr.validar_cadena(new_final):
+                QMessageBox.accept(self, "Final aceptado exitosamente", "¡Gracias por tu sugerencia, Esto nos ayudará a crear historias  más geniales!")
+                self.accept()  # Cerrar el cuadro de diálogo si el final es válido
+            else:
+                reply = QMessageBox.critical(self, "Error", "El final sugerido no cumple con la gramática establecida ya que debe empezar con la cadena 'Yo creo que el final puede mejorar con '. ¿Desea seguir editando?",
+                                            QMessageBox.Yes | QMessageBox.No)
+                if reply == QMessageBox.No:
+                    self.reject()  # Cerrar el cuadro de diálogo si el usuario elige no seguir editando
 
 def create_window():
     app = QApplication(sys.argv)
     ventana = FlorkWindow()
     ventana.show()
     sys.exit(app.exec_())
+
+
+    
 
 if __name__ == '__main__':
     create_window()
