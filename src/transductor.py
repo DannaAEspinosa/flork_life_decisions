@@ -47,11 +47,64 @@ class Transductor:
             ('q32', 'd', 'q32', ['l']),
             ('q32', 'b', 'q35', ['a']),
             ('q35', 'n', 'q36', ['s']),
-           
-           
-            
+
+            ##New string
+            #Soy tu padre
+            #tu
+            ('q4', 'f', 'q37', ['t']),
+            ('q37', 'r', 'q38', ['u']),
+            ('q38', ' ', 'q39', [' ']),
+            #padre
+            ('q39', 'r', 'q40', ['p']),
+            ('q40', 'b', 'q41', ['a']),
+            ('q41', 'l', 'q42', ['d']),
+            ('q42', 'u', 'q43', ['r']),
+            ('q43', 'o', 'q44', ['e']),
+            #fantasma
+            ('q39', 'h', 'q46', ['f']),
+            ('q46', 'b', 'q47', ['a']),
+            ('q47', 'y', 'q48', ['n']),
+            ('q48', 'f', 'q49', ['t']),
+            ('q49', 'b', 'q50', ['a']),
+            ('q50', 'n', 'q51', ['s']),
+            ('q51', 'x', 'q52', ['m']),
+            ('q52', 'b', 'q53', ['a']),
+            ('q53', ' ', 'q54', [' ']),
+            #personal
+            ('q54', 'r', 'q55', ['p']),
+            ('q55', 'o', 'q56', ['e']),
+            ('q56', 'u', 'q57', ['r']),
+            ('q57', 'n', 'q58', ['s']),
+            ('q58', 'v', 'q59', ['o']),
+            ('q59', 'y', 'q60', ['n']),
+            ('q60', 'b', 'q61', ['a']),
+            ('q61', 'd', 'q62', ['l']),
+            ('q62', ' ', 'q63', [' ']),
+            #guardian
+            ('q7', 'i', 'q64', ['g']),
+            ('q64', 'p', 'q65', ['u']),
+            ('q65', 'b', 'q66', ['a']),
+            ('q66', 'u', 'q67', ['r']),
+            ('q67', 'l', 'q68', ['d']),
+            ('q68', 'z', 'q69', ['i']),
+            ('q69', 'b', 'q70', ['a']),
+            ('q70', 'y', 'q71', ['n']),
+            ('q71', ' ', 'q11', [' ']),
+            #la
+            ('q14', 'd', 'q73', ['l']),
+            ('q73', 'b', 'q74', ['a']),
+            ('q74', ' ', 'q75', [' ']),
+            #muerte
+            ('q75', 'x', 'q76', ['m']),
+            ('q76', 'p', 'q77', ['u']),
+            ('q77', 'o', 'q78', ['e']),
+            ('q78', 'u', 'q79', ['r']),
+            ('q79', 'f', 'q80', ['t']),
+            ('q80', 'o', 'q81', ['e']),
+            ('q81', ' ', 'q82', [' ']),    
             
         ])
+        #Soy el eco de tus peores pesadillas
         self.transducer.add_start_state('q0')
         self.transducer.add_final_state('q3')
         self.transducer.add_final_state('q6')
@@ -60,6 +113,25 @@ class Transductor:
         self.transducer.add_final_state('q17')
         self.transducer.add_final_state('q24')
         self.transducer.add_final_state('q36')
+        ##Soy tu padre
+        #tu
+        self.transducer.add_final_state('q38')
+        #padre
+        self.transducer.add_final_state('q44')
+        ##Soy tu fantasma personal
+        #fantasma
+        self.transducer.add_final_state('q53')
+        #personal
+        self.transducer.add_final_state('q62')
+        ##Soy el guardian de la muerte
+        #guardian
+        self.transducer.add_final_state('q71')
+        #la
+        self.transducer.add_final_state('q74')
+        #muerte
+        self.transducer.add_final_state('q81')
+        
+
        
 
     def translateDialog(self,cadena):
@@ -69,19 +141,20 @@ class Transductor:
 
         return translation
     
-def init_application():
+def init_transductor(cadena_entrada):
     # Crear una instancia del objeto Transductor
     transductor = Transductor()
 
     # Llamar a la función translate con una cadena de entrada
-    cadena_entrada = 'Nvk od oev lo frn rovuon ronblzddbn'
     cadena_traducida = transductor.translateDialog(cadena_entrada)
 
     # Imprimir el resultado de la traducción
     traduccion = "".join(cadena_traducida)
     print("This is the translation:", traduccion)
+    return traduccion
 
 if __name__ == '__main__':
-    init_application()
+    cadena_entrada = 'Nvk od ipbulzby lo db xpoufo'
+    init_transductor(cadena_entrada)
 
     
