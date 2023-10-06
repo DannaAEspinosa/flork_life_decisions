@@ -1,10 +1,12 @@
 import unittest
-from src.expresion import Expresion
+import sys
+import src.expresion
+#from src.expresion import Expresion
 
 class ExpresionTest(unittest.TestCase):
 
     def setUp(self):
-        self.expresion = Expresion()
+        self.expresion = src.expresion.Expresion()
 
     def test_estandar1(self):
         cadena = "JohnDue"

@@ -1,13 +1,15 @@
 import unittest
-from src.juego import FlorkWindow,NuevoFinalDialog
+import sys
+import src.juego
+#from src.juego import FlorkWindow,NuevoFinalDialog
 
 class FlorkWindowTest(unittest.TestCase):
 
     def setUp(self):
-        self.window=FlorkWindow()
+        self.window=src.juego.FlorkWindow()
 
 class NuevoFinalDialogTest(unittest.TestCase):
 
     def setUp(self):
-        self.nFinal=NuevoFinalDialog()
+        self.nFinal=src.juego.NuevoFinalDialog()
     
