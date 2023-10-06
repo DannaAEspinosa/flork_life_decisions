@@ -1,3 +1,5 @@
+import expresion
+import re
 from pyformlang.cfg import Variable, Terminal, Production, CFG
 
 class Gramatica:
@@ -49,13 +51,16 @@ class Gramatica:
     
 
     def validar_cadena(self, cadena):
-       cadena_lista = cadena.split(" ")
-       conjunto_terminales = self.glc.terminals
-       lista_verificar = []
-       for i in cadena_lista:
-          if i=="Yo" or i=="creo" or i=="que" or i=="el" or i=="final" or i=="puede" or i=="mejorar" or i=="con":
-            tmp = Terminal(i)
-            lista_verificar.append(tmp)
-       return self.glc.contains(lista_verificar)
+        # Expresión regular para buscar las palabras clave en la cadena
+        exp=expresion.Expresion()
+
+        # Buscar todas las coincidencias en la cadena
+        coincidencias =  exp.validateFinal(cadena)
+
+        # Crear una lista de terminales a partir de las coincidencias
+        lista_verificar = [Terminal(c) for c in coincidencias]
+
+        # Verificar si todas las palabras clave están en la gramática
+        return self.glc.contains(lista_verificar)
 
 

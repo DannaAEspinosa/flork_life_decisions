@@ -1,5 +1,5 @@
 import unittest
-from src.gui import FlorkWindow,NuevoFinalDialog
+from src.juego import FlorkWindow,NuevoFinalDialog
 
 class FlorkWindowTest(unittest.TestCase):
 

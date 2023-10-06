@@ -12,7 +12,7 @@ class ExpresionTest(unittest.TestCase):
     
     def test_estandar2(self):
         cadena = "Yo"
-        self.assertTrue(self.expresion.validateNewFinal(cadena))
+        self.assertTrue(self.expresion.validateFinal(cadena))
     
     def test_limite1(self):
         cadena = "A"
@@ -20,7 +20,7 @@ class ExpresionTest(unittest.TestCase):
     
     def test_limite2(self):
         cadena = ""
-        self.assertFalse(self.expresion.validateNewFinal(cadena))
+        self.assertFalse(self.expresion.validateFinal(cadena))
     
     def test_interesante1(self):
         cadena = "John-Due"
