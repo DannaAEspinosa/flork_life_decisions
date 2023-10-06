@@ -3,7 +3,7 @@ import automata, expresion, gramatica
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect, QInputDialog, QDialog, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont, QIcon
 from PyQt5.QtCore import Qt
-from pyformlang.finite_automaton import Symbol
+from pyformlang.finite_automaton import Symbol, State
 
 class FlorkWindow(QWidget):
     def __init__(self):
@@ -144,6 +144,20 @@ class FlorkWindow(QWidget):
         top_rect.setMargin(10)
         top_layout.addWidget(top_rect)
 
+        translate=QHBoxLayout()
+        if (estadoActual == State("q4") or estadoActual == State("q11") or estadoActual == State("q12") or estadoActual == State("q15") or estadoActual == State("q16") or estadoActual == State("q18") ):
+            
+            palabra= aut.palabrasDesconocidas[estadoActual]
+            tr=QPushButton(f"Click para traducir palabras: {palabra}")
+            tr.setFixedWidth(700)
+            tr.setFixedHeight(30)
+            tr.setStyleSheet("background-color: #ffbd59;")
+            tr.setFont(QFont("Gill Sans MT Condensed", 15))
+            tr.clicked.connect(self.traducirPalabras)
+            
+            translate.addWidget(tr)
+            
+
         center_layout=QHBoxLayout()
         # Imagen en el centro
         image_label = QLabel(page)
@@ -154,7 +168,6 @@ class FlorkWindow(QWidget):
 
         
         center_layout.addWidget(image_label)
-
 
         # División en dos recuadros en la parte inferior
         if estadoActual not in aut.estado_aceptacion:
@@ -171,6 +184,7 @@ class FlorkWindow(QWidget):
                 left_bottom_rect.setFixedWidth(350)
                 left_bottom_rect.setFixedHeight(100)
             left_bottom_rect.setStyleSheet("background-color: #C93431;")
+
             estado_actualA = self.elegirOpcion(aut,estadoActual,Symbol("a"))
             left_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualA))
 
@@ -196,6 +210,7 @@ class FlorkWindow(QWidget):
                 right_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualC))
 
             # Agregar imagen a la izquierda de cada botón
+
             
             simboloA=Symbol("a")
             transicionA=(estadoActual,simboloA)
@@ -243,10 +258,14 @@ class FlorkWindow(QWidget):
             bottom_layout.addWidget(center_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             if estadoActual == aut.estado_inicial: 
                 bottom_layout.addWidget(right_bottom_rect, alignment=Qt.AlignmentFlag.AlignCenter)
-            
-                    
-            # Agregar elementos al layout principal
+
+                estado_actualC = self.elegirOpcion(aut,estadoActual,Symbol("c"))
+                right_bottom_rect.clicked.connect(lambda: self.change_page(n,aut,estado_actualC))
+               
+                # Agregar elementos al layout principal
             layout.addLayout(top_layout)
+            if (estadoActual == State("q4") or estadoActual == State("q11") or estadoActual == State("q12") or estadoActual == State("q15") or estadoActual == State("q16") or estadoActual == State("q18") ):
+                layout.addLayout(translate)
             layout.addLayout(center_layout)
             layout.addLayout(bottom_layout)
         else:
@@ -265,7 +284,7 @@ class FlorkWindow(QWidget):
 
             left_button_rect = QPushButton("Volver a jugar")
             left_button_rect.setFixedWidth(270)
-            left_button_rect.setFixedHeight(90)
+            left_button_rect.setFixedHeight(60)
             left_button_rect.setStyleSheet("background-color: #14DF5E; ")
             left_button_rect.setFont(QFont("Gill Sans MT Condensed", 15))
 
@@ -273,7 +292,7 @@ class FlorkWindow(QWidget):
 
             r_button_rect = QPushButton("Sugerir otro final")
             r_button_rect.setFixedWidth(270)
-            r_button_rect.setFixedHeight(90)
+            r_button_rect.setFixedHeight(60)
             r_button_rect.setStyleSheet("background-color: #70BAFF; ")
             r_button_rect.setFont(QFont("Gill Sans MT Condensed", 15))
 
@@ -281,7 +300,7 @@ class FlorkWindow(QWidget):
 
             exitBt = QPushButton("Salir")
             exitBt.setFixedWidth(270)
-            exitBt.setFixedHeight(90)
+            exitBt.setFixedHeight(60)
             exitBt.setStyleSheet("background-color: #C93431; ")
             exitBt.setFont(QFont("Gill Sans MT Condensed", 15))
 
@@ -290,9 +309,10 @@ class FlorkWindow(QWidget):
             bottom_layout.addWidget(left_button_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             bottom_layout.addWidget(r_button_rect, alignment=Qt.AlignmentFlag.AlignCenter)
             bottom_layout.addWidget(exitBt, alignment=Qt.AlignmentFlag.AlignCenter)
-             
 
             layout.addLayout(top_layout)
+            if (estadoActual == State("q4") or estadoActual == State("q11") or estadoActual == State("q12") or estadoActual == State("q15") or estadoActual == State("q16") or estadoActual == State("q18") ):
+                layout.addLayout(translate)
             layout.addLayout(center_layout)
             layout.addLayout(x)
             layout.addLayout(bottom_layout)
@@ -331,6 +351,19 @@ class FlorkWindow(QWidget):
         self.page_intro = self.create_intro_page()
         self.stacked_widget.addWidget(self.page_intro)
         self.stacked_widget.setCurrentWidget(self.page_intro)
+
+    def traducirPalabras(self, state):
+        msg = QMessageBox(self)
+        msg.setIconPixmap(QPixmap('assets/images/accept.png').scaled(80,80))
+        msg.setWindowTitle("Final aceptado exitosamente")
+        msg.setText("¡Gracias por tu sugerencia, Esto nos ayudará a crear historias más geniales!")
+        msg.setFont(QFont("Gill Sans MT Condensed", 12))
+        msg.setStyleSheet("background-color: white; color: black;")
+
+        ok_button = msg.addButton('OK', QMessageBox.AcceptRole)
+        ok_button.setStyleSheet("background-color: #70BAFF; color: black;")
+        ok_button.setFont(QFont("Gill Sans MT Condensed", 12))
+
 
 
     def startGame(self,nombre):
