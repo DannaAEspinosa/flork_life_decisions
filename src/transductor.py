@@ -145,14 +145,4 @@ class Transductor:
         return translation
     
 
-if __name__ == '__main__':
-    t=Transductor()
-    cadena_entrada = 'Nvk od oev lo frn rovuon ronblzddbn'
-    c2='Nvk fr rbluo'
-    c3='Nvk od ipbulzby lo db xpoufo'
-    c4='Nvk fr hbyfbnxb rounvybd'
-    c5 = 'Nvk db xpoufo'
-    c='Xpoufo'
-    t.translateDialog(c)
-
     

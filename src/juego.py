@@ -1,5 +1,5 @@
 import sys
-import automata, expresion, gramatica
+import automata, expresion, gramatica, transductor
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QVBoxLayout, QStackedWidget, QHBoxLayout,QSpacerItem, QSizePolicy, QGraphicsBlurEffect, QInputDialog, QDialog, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont, QIcon
 from PyQt5.QtCore import Qt
@@ -153,7 +153,7 @@ class FlorkWindow(QWidget):
             tr.setFixedHeight(30)
             tr.setStyleSheet("background-color: #ffbd59;")
             tr.setFont(QFont("Gill Sans MT Condensed", 15))
-            tr.clicked.connect(self.traducirPalabras)
+            tr.clicked.connect(lambda:self.traducirPalabras(palabra))
             
             translate.addWidget(tr)
             
@@ -352,18 +352,19 @@ class FlorkWindow(QWidget):
         self.stacked_widget.addWidget(self.page_intro)
         self.stacked_widget.setCurrentWidget(self.page_intro)
 
-    def traducirPalabras(self, state):
+    def traducirPalabras(self, palabra):
+        t=transductor.Transductor()
+        traduccion=t.translateDialog(palabra)
         msg = QMessageBox(self)
-        msg.setIconPixmap(QPixmap('assets/images/accept.png').scaled(80,80))
-        msg.setWindowTitle("Final aceptado exitosamente")
-        msg.setText("¡Gracias por tu sugerencia, Esto nos ayudará a crear historias más geniales!")
-        msg.setFont(QFont("Gill Sans MT Condensed", 12))
+        msg.setIconPixmap(QPixmap('assets/images/question.png').scaled(80,80))
+        msg.setWindowTitle("Traducción")
+        msg.setText(f"La traducción de {palabra} dicho por la entidad aterradora es: {traduccion}")
+        msg.setFont(QFont("Gill Sans MT Condensed", 15))
         msg.setStyleSheet("background-color: white; color: black;")
-
         ok_button = msg.addButton('OK', QMessageBox.AcceptRole)
         ok_button.setStyleSheet("background-color: #70BAFF; color: black;")
-        ok_button.setFont(QFont("Gill Sans MT Condensed", 12))
-
+        ok_button.setFont(QFont("Gill Sans MT Condensed", 15))
+        msg.exec_()
 
 
     def startGame(self,nombre):
