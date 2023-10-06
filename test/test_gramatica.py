@@ -5,8 +5,6 @@ class GramaticaTest(unittest.TestCase):
     
     def setUp(self):
         self.gramatica = Gramatica()
-        
-    
     def test_estandar(self):
         cadena = "Yo creo que el final puede mejorar con la propuesta de agregar mascotas"
         self.assertTrue(self.gramatica.validar_cadena(cadena))
