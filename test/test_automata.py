@@ -1,11 +1,12 @@
 import unittest
-from src.automata import Automata
+import src.automata
+#from src.automata import Automata
 from pyformlang.finite_automaton import Symbol, State
 
 class AutomataTest(unittest.TestCase):
 
     def setUp(self):
-        self.automata = Automata("Carlos")
+        self.automata = src.automata.Automata("Carlos")
 
     def test_estandar(self):
         #la cadena de opciones a probar en este caso es "ab". 

@@ -91,7 +91,7 @@ class FlorkWindow(QWidget):
         iniciar_button.setStyleSheet("background-color: #FF3B41; color: white;")
         iniciar_button.clicked.connect(lambda: self.startGame(nombre))
         # Texto dentro del recuadro
-        texto = f"¡Hola {nombre}, te damos la bienvenida a FLORK DECISIONS LIFE! En este emocionante juego, te sumergirás en el fascinante mundo de Flork {nombre}, un personaje lleno de curiosidad y valentía que se enfrenta a una serie de desafíos y decisiones que afectarán su destino. \n\nTú eres el narrador de su historia y, en cada paso del camino, deberás tomar decisiones cruciales que influirán en el rumbo de sus aventuras. \n\nCONTROLES: \nPara poder tomar una decisión podrás teclear la letra correspondiente a cada opción (a, b o c) o simplemente darle click a la opción deseada. \n\nAhora sí ¿Estás listo para empezar?"
+        texto = f"¡Hola {nombre}, te damos la bienvenida a FLORK DECISIONS LIFE! En este emocionante juego, te sumergirás en el fascinante mundo de Flork {nombre}, un personaje lleno de curiosidad y valentía que se enfrenta a una serie de desafíos y decisiones que afectarán su destino. \n\nTú eres el narrador de su historia y, en cada paso del camino, deberás tomar decisiones cruciales que influirán en el rumbo de sus aventuras. \n\nCONTROLES: \nPara poder tomar una decisión simplemente debes darle click a la opción deseada. \n\nAhora sí ¿Estás listo para empezar?"
 
         descp_label = QLabel(texto, white_box)  # Agrega white_box como padre de descp_label
         descp_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Alinea el texto al centro vertical y horizontalmente
@@ -358,7 +358,7 @@ class FlorkWindow(QWidget):
         msg = QMessageBox(self)
         msg.setIconPixmap(QPixmap('assets/images/question.png').scaled(80,80))
         msg.setWindowTitle("Traducción")
-        msg.setText(f"La traducción de {palabra} dicho por la entidad aterradora es: {traduccion}")
+        msg.setText(f"La traducción de '{palabra}' dicho por la entidad aterradora es: {traduccion}")
         msg.setFont(QFont("Gill Sans MT Condensed", 15))
         msg.setStyleSheet("background-color: white; color: black;")
         ok_button = msg.addButton('OK', QMessageBox.AcceptRole)

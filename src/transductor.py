@@ -140,8 +140,6 @@ class Transductor:
     def translateDialog(self,cadena):
         translation =(list(map(lambda x:
            "".join(x),list(self.transducer.translate(cadena)))))
-        print(cadena)
-
         return translation
     
 
