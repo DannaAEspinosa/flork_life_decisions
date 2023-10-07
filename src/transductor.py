@@ -5,6 +5,8 @@ class Transductor:
         self.transducer = FST()
 
         self.transducer.add_transitions([
+            #muerte rep
+            ('q0', 'X', 'q76', ['M']),
             # Soy
             ('q0', 'N', 'q1', ['S']),
             ('q1', 'v', 'q2', ['o']),
@@ -101,7 +103,11 @@ class Transductor:
             ('q78', 'u', 'q79', ['r']),
             ('q79', 'f', 'q80', ['t']),
             ('q80', 'o', 'q81', ['e']),
-            ('q81', ' ', 'q82', [' ']),    
+            ('q81', ' ', 'q82', [' ']),
+            
+            #la
+            ('q3', ' ', 'q14', [' ']),
+            
             
         ])
         #Soy el eco de tus peores pesadillas
@@ -130,31 +136,11 @@ class Transductor:
         self.transducer.add_final_state('q74')
         #muerte
         self.transducer.add_final_state('q81')
-        
-
-       
 
     def translateDialog(self,cadena):
         translation =(list(map(lambda x:
            "".join(x),list(self.transducer.translate(cadena)))))
-        print(cadena)
-
         return translation
     
-def init_transductor(cadena_entrada):
-    # Crear una instancia del objeto Transductor
-    transductor = Transductor()
-
-    # Llamar a la función translate con una cadena de entrada
-    cadena_traducida = transductor.translateDialog(cadena_entrada)
-
-    # Imprimir el resultado de la traducción
-    traduccion = "".join(cadena_traducida)
-    print("This is the translation:", traduccion)
-    return traduccion
-
-if __name__ == '__main__':
-    cadena_entrada = 'Nvk od ipbulzby lo db xpoufo'
-    init_transductor(cadena_entrada)
 
     

@@ -1,5 +1,6 @@
 import unittest
 import sys
+sys.path.append("src\gramatica.py")
 import src.gramatica
 #from src.gramatica import Gramatica
 
